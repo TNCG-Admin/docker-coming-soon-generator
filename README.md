@@ -1,76 +1,89 @@
-# Docker coming-soon Generator
 
-Serves a "comming soon" page for you filled with content from your environment variables.
+# Docker Coming-Soon Generator
 
-I took the [bootstrap4 comming soon](https://github.com/BlackrockDigital/startbootstrap-coming-soon) template as default
-and wrote a docker deploy script with twig template compiler where you can pick and run a page within minutes.
+This project serves a "Coming Soon" page with content dynamically filled from environment variables. The default template is based on the [Bootstrap 4 Coming Soon](https://github.com/BlackrockDigital/startbootstrap-coming-soon) template and includes a Docker deploy script with a Twig template compiler, allowing you to quickly customize and deploy a page.
 
-Here is an example of the result:
+## Acknowledgments
+- This project is forked from [roest01/docker-coming-soon-generator](https://github.com/roest01/docker-coming-soon-generator).
 
-![bootstrap4-example](https://raw.githubusercontent.com/roest01/docker-coming-soon-generator/master/templates/bootstrap4/example.png)
+## Example
+Here is an example of the resulting page:
 
-# Usage
-Please set environment variable `TEMPLATE` to pick one of these avaliable templates.
-If you don't pick a template, `bootstrap4` is default
+![bootstrap4-example](https://github.com/TNCG-Admin/docker-coming-soon-generator/blob/master/templates/bootstrap4/example.png)
 
-| Template   | Preview                                                                                                                                | Description |
-|------------|----------------------------------------------------------------------------------------------------------------------------------------| ------- |
-| bootstrap4 | <img src="https://raw.githubusercontent.com/roest01/docker-coming-soon-generator/master/templates/bootstrap4/example.png" width="250"> |  | 
-| bootstrap5 | <img src="https://raw.githubusercontent.com/roest01/docker-coming-soon-generator/master/templates/bootstrap5/example.png" width="250"> |  | 
-| blank      |                                                                                                                                        | output variables one by one |
+---
 
-You have the following environment variables which allow you to configure the
-coming soon page:
+## Usage
 
+To use this generator, set the environment variable `TEMPLATE` to select one of the available templates. If no template is specified, `bootstrap4` is used by default.
 
+### Available Templates
 
-| Variable name | Description                            | used in Templates | Example                                                                |
-|-----------------|------------------------------------------- |------------------| ---------------------------------------------------------------------------------|
-| TITLE         | Webpage head title and heading              | bootstrap4/5, blank | Coming Soon!                                                   |
-| SUBLINE       | The sentence under the title                | bootstrap4/5, blank | We're working hard to finish the development of this site. Our target launch date is &lt;strong&gt;January 2019&lt;/strong&gt;!                |
-| MAIN_COLOR  | Main color to be used in template      | bootstrap4/5, blank | #6c757d                     |
-| VIDEO_URL  | Internal or external URL to the background video      | bootstrap5, blank | mp4/bg.mp4                     |
-| BACKGROUND_IMAGE  | Image to use as body background     | bootstrap4/5, blank | none                    |
-| FACEBOOK_URL  | Facebook URL to your page      | bootstrap4/5, blank | https://www.facebook.com/yourPage                     |
-| TWITTER_URL   | Twitter URL to your page       | bootstrap4/5, blank | https://www.twitter.com/yourPage                       |
-| GITHUB_URL    | Github URL to your page        | bootstrap4/5, blank | https://www.github.com/yourPage                         |
-HTML is allowed !
+| Template   | Preview                                                                                                                                | Description       |
+|------------|----------------------------------------------------------------------------------------------------------------------------------------|-------------------|
+| bootstrap4 | <img src="https://github.com/TNCG-Admin/docker-coming-soon-generator/blob/master/templates/bootstrap4/example.png" width="250"> | Default template  |
+| bootstrap5 | <img src="https://github.com/TNCG-Admin/docker-coming-soon-generator/blob/master/templates/bootstrap5/example.png" width="250"> | Modern design     |
+| blank      |                                                                                                                                        | Plain output      |
 
-## docker
-```
+### Configuration Variables
+The following environment variables can be used to configure the "Coming Soon" page:
+
+| Variable Name   | Description                                   | Used In Templates   | Example                                                                 |
+|-----------------|-----------------------------------------------|---------------------|-------------------------------------------------------------------------|
+| TITLE           | Webpage head title and main heading          | bootstrap4/5, blank | Coming Soon!                                                           |
+| SUBLINE         | Text under the title                         | bootstrap4/5, blank | We're working hard to finish the development of this site!             |
+| MAIN_COLOR      | Primary color for the template               | bootstrap4/5, blank | #6c757d                                                                |
+| VIDEO_URL       | Background video URL (internal or external)  | bootstrap5, blank   | mp4/bg.mp4                                                             |
+| BACKGROUND_IMAGE| Background image URL                         | bootstrap4/5, blank | https://example.com/image.jpg                                          |
+| FACEBOOK_URL    | Facebook page URL                            | bootstrap4/5, blank | https://www.facebook.com/yourPage                                      |
+| TWITTER_URL     | Twitter page URL                             | bootstrap4/5, blank | https://www.twitter.com/yourPage                                       |
+| GITHUB_URL      | GitHub repository URL                        | bootstrap4/5, blank | https://www.github.com/yourRepo                                        |
+
+HTML is allowed in these variables for additional customization.
+
+---
+
+## Running with Docker
+```bash
 docker run -d \
   --name website \
   -e TEMPLATE=bootstrap5 \
   -e TITLE="Your custom <h4>TITLE</h4>" \
-  -e SUBLINE="01234 / 5678910<br />mail@example.com <br /><br />Company: example <br />Your Name <br />Your Adress. 00 <br />00000 Country" \
-  roest/docker-coming-soon-generator
+  -e SUBLINE="01234 / 5678910<br />mail@example.com <br /><br />Company: example <br />Your Name <br />Your Address. 00 <br />00000 Country" \
+  tncgadmin/docker-coming-soon-generator
 ```
 
+---
 
-## what happen at Build ?
-1. Checkout missing templates with `checkout.sh` script into `templates`
-2. move template (name stored in env) `TEMPLATE` to root
-3. remove templates folder with unused templates
-4. write config file from env if file missing
-5. compile `index.html.twig` into `index.html` with config.json as variables
+## Build Process
+Occurs when run.sh is executed:
+1. Clones the Bootstrap "Coming Soon" repository into a temporary directory.
+2. Resets the repository to a specific commit for consistency.
+3. Prepares the destination directory by ensuring it exists and clearing old content.
+4. Moves the new template content from the temporary directory to the destination directory.
+5. Cleans up the temporary directory to free up space.
+6. Removes unnecessary files like checkout.sh if they exist.
+7. Downloads and sets up the Twig template compiler (twigc) for processing templates.
+8. Prepares the SCSS directory by removing any existing content and moving files from the selected template.
+9. Checks for nginx.conf and moves it to the Nginx configuration directory if present.
+10. Removes unused templates and directories to reduce clutter.
+11. Creates a config.json file dynamically from environment variables if it doesn't already exist.
+12. Compiles index.html.twig into a usable index.html using the config.json file.
+13. Cleans up temporary directories and Git artifacts to tidy up the environment.
+14. Checks if Nginx is already running and starts it only if necessary.
+15. Prints a success message to indicate the process completed successfully.
 
+---
 
-## FAQ
+## Frequently Asked Questions
 
-##### How to change Video in `bootstrap4`/`bootstrap5` template?
-Important: only mp4 possible ! Many ways to rome:
+### How do I change the background video in the `bootstrap4` or `bootstrap5` template?
+Videos must be in MP4 format. You can configure the video in one of two ways:
+1. Mount a volume into `/usr/share/nginx/html/mp4` and place your `bg.mp4` file there.
+2. Set the `VIDEO_URL` environment variable to the URL of your video.
 
-1. mount volume into `/usr/share/nginx/html/mp4` and put `bg.mp4` into folder.
-2. enter external link to any mp4 video into `VIDEO_URL` env`
-
+---
 
 ## Contributing
+Contributions are welcome! If you want to add more templates or optimize the generator, feel free to contribute. To add a new template, include it in the `templates` folder, create an `index.html.twig` file, and document the relevant environment variables in this README.
 
-If you're able to add more templates or optimise anything you're welcome.
-New templates? Just check out or add them into `templates` folder, create `index.html.twig` file
-and keep records of used environment variables in `README.md
-
-
-## kudos
-by the way there is another comming soon for docker
-[zedtux/docker-coming-soon](https://github.com/zedtux/docker-coming-soon) - may this is working better for you?

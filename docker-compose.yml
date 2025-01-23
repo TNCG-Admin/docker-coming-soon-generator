@@ -1,7 +1,7 @@
 version: '3'
 services:
   website:
-    image: roest/docker-coming-soon-generator
+    image: tncgadmin/docker-coming-soon-generator
     environment:
       TEMPLATE: bootstrap5
       TITLE: Your custom <h4>TITLE</h4>

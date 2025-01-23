@@ -1,26 +1,33 @@
-FROM nginx:1.27.1
+FROM nginx:1.27.3
 
-# install dependencies
+# Install dependencies
 RUN apt-get update && apt-get install -y \
   wget \
   git \
-  php8.2-cli
+  php8.2-cli \
+  && apt-get clean \
+  && rm -rf /var/lib/apt/lists/*
 
+# Set environment variables
 ENV BASE_DIR /usr/share/nginx/html
 WORKDIR $BASE_DIR
 
 ARG defaultTemplate="bootstrap4"
 ENV TEMPLATE=$defaultTemplate
 
-# remove nginx default content
-RUN rm /usr/share/nginx/html/*
+# Remove default Nginx content
+RUN rm -rf /usr/share/nginx/html/*
 
-# add comming soon page
+# Add "Coming Soon" page content
 ADD ./ $BASE_DIR
 
-ADD compileAndRun.sh /usr/local/bin/
+# Add run.sh script and set executable permissions
+ADD run.sh /usr/local/bin/
+RUN chmod +x /usr/local/bin/run.sh
 
+# Expose ports
 EXPOSE 80
 EXPOSE 443
 
-ENTRYPOINT ["compileAndRun.sh"]
+# Set entrypoint
+ENTRYPOINT ["/usr/local/bin/run.sh"]
