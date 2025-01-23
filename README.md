@@ -9,7 +9,7 @@ This project serves a "Coming Soon" page with content dynamically filled from en
 ## Example
 Here is an example of the resulting page:
 
-![bootstrap4-example](https://github.com/TNCG-Admin/docker-coming-soon-generator/blob/master/templates/bootstrap4/example.png)
+![bootstrap4-example](https://raw.githubusercontent.com/TNCG-Admin/docker-coming-soon-generator/refs/heads/main/templates/bootstrap4/example.png)
 
 ---
 
@@ -21,8 +21,8 @@ To use this generator, set the environment variable `TEMPLATE` to select one of 
 
 | Template   | Preview                                                                                                                                | Description       |
 |------------|----------------------------------------------------------------------------------------------------------------------------------------|-------------------|
-| bootstrap4 | <img src="https://github.com/TNCG-Admin/docker-coming-soon-generator/blob/master/templates/bootstrap4/example.png" width="250"> | Default template  |
-| bootstrap5 | <img src="https://github.com/TNCG-Admin/docker-coming-soon-generator/blob/master/templates/bootstrap5/example.png" width="250"> | Modern design     |
+| bootstrap4 | <img src="https://raw.githubusercontent.com/TNCG-Admin/docker-coming-soon-generator/refs/heads/main/templates/bootstrap4/example.png" width="250"> | Default template  |
+| bootstrap5 | <img src="https://raw.githubusercontent.com/TNCG-Admin/docker-coming-soon-generator/refs/heads/main/templates/bootstrap5/example.png" width="250"> | Modern design     |
 | blank      |                                                                                                                                        | Plain output      |
 
 ### Configuration Variables
